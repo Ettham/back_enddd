@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bateria | InstruMusic</title>
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #eee;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #background-img {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            background: url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1920&q=90") center/cover no-repeat;
+            filter: brightness(0.35);
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            z-index: -2;
+        }
+
+        header.main-header {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:15px 30px;
+        }
+
+        header .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav.main-nav a {
+            margin-left: 12px;
+            color: #eee;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+        .btn-secondary:hover {
+            background-color: #fff;
+            color: #1e1e1e;
+        }
+
+        .btn-primary {
+            background-color: #f70000;
+            color: #1e1e1e;
+        }
+        .btn-primary:hover {
+            opacity: 0.85;
+        }
+
+        main.content-section {
+            max-width: 900px;
+            margin: 60px auto 50px auto;
+            padding: 25px;
+            background: rgba(25,25,25,0.55);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        main h1 {
+            color: #fff;
+            margin: 15px 0;
+            font-size: 1.9rem;
+        }
+
+        main h2 {
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: #fff;
+            font-size: 1.3rem;
+        }
+
+        main p {
+            margin-bottom: 18px;
+            line-height: 1.55;
+        }
+
+        .course-list {
+            margin-left: 20px;
+            margin-bottom: 25px;
+        }
+.instrument-image-large {
+    display: block;
+    margin: 0 auto 25px auto;
+    max-width: 35%; 
+    height: auto;   
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #bbb;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+            header.main-header {
+                flex-direction: column;
+                padding: 15px;
+            }
+            nav.main-nav {
+                margin-top: 10px;
+            }
+            nav.main-nav a {
+                display: inline-block;
+                margin: 8px 10px 0 10px;
+            }
+            main.content-section {
+                padding: 18px;
+                margin: 40px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="background-img"></div>
+
+    <canvas id="particles-js"></canvas>
+
+    <header class="main-header" style="background: transparent; border-bottom: none;">
+        <a href="/public/pages/index.html" class="logo">InstruMusic</a>
+    
+        <nav class="main-nav">
+            <a href="#" class="nav-item">Meus Cursos</a>
+            <a href="/public/pages/progresso.html" class="nav-item">Progresso</a>
+            <a href="/public/pages/perfil.html" class="nav-item">Perfil</a>
+            <a href="/public/pages/login.html" class="btn btn-secondary">Login</a>
+            <a href="/public/pages/register.html" class="btn btn-primary">Criar Conta</a>
+        </nav>
+    </header>
+
+    <main class="content-section instrument-detail">
+        
+        <img src="/public/img/bateria.webp" alt="Bateria Acústica" class="instrument-image-large">
+
+        <h1>Aprenda a tocar Bateria</h1>
+
+        <p>A bateria é o coração de toda banda, responsável pelo ritmo e pela energia da música.
+            Nos cursos você aprenderá desde coordenação básica até viradas avançadas, leitura de partituras
+            e execução de diferentes estilos rítmicos.</p>
+
+        <h2>Cursos Disponíveis</h2>
+        <ul class="course-list">
+            <li>Ritmos Fundamentais: Rock, Pop e Blues</li>
+            <li>Independência e Coordenação de Membros</li>
+            <li>Técnicas de Bumbo Duplo e Viradas Avançadas</li>
+            <li>Leitura de Partituras para Bateria</li>
+        </ul>
+
+    </main>
+
+    <footer>
+        <p>© 2025 InstruMusic. Todos os direitos reservados.</p>
+    </footer>
+<script>
+(function(){
+  const canvas = document.getElementById('particles-js');
+  const ctx = canvas.getContext('2d');
+  if(!ctx) return;
+
+  let DPR = window.devicePixelRatio || 1;
+  let W = 0, H = 0;
+  const particles = [];
+  const PARTICLE_COUNT = 80;
+  const CONNECT_DISTANCE = 120;
+  const notes = ["\u266A", "\u266B"];
+  function setSize(){
+    DPR = window.devicePixelRatio || 1;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.style.width = W+'px';
+    canvas.style.height = H+'px';
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+
+  function Particle(){
+    this.reset();
+  }
+
+  Particle.prototype.reset = function(){
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.size = Math.random() * 16 + 8;
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.6;
+    this.alpha = 0.3 + Math.random() * 0.7;
+    this.note = notes[Math.floor(Math.random() * notes.length)];
+    this.rotation = Math.random() * 2 * Math.PI;
+    this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+  }
+
+  Particle.prototype.update = function(){
+    this.x += this.vx;
+    this.y += this.vy;
+    this.rotation += this.rotationSpeed;
+
+    if(this.x < -20) this.x = W + 20;
+    if(this.x > W + 20) this.x = -20;
+    if(this.y < -20) this.y = H + 20;
+    if(this.y > H + 20) this.y = -20;
+  }
+
+  Particle.prototype.draw = function(){
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.fillStyle = "#fff";
+    ctx.font = `${this.size}px Arial`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(this.note, 0, 0);
+    ctx.restore();
+  }
+
+  function connectParticles(){
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < CONNECT_DISTANCE){
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - dist/CONNECT_DISTANCE) * 0.25) + ')';
+          ctx.lineWidth = 1;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function initParticles(){
+    particles.length = 0;
+    for(let i=0;i<PARTICLE_COUNT;i++) particles.push(new Particle());
+  }
+
+  let rafId = null;
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    connectParticles();
+    for(let p of particles) p.update(), p.draw();
+    rafId = requestAnimationFrame(render);
+  }
+
+  function init(){
+    setSize();
+    initParticles();
+    if(rafId) cancelAnimationFrame(rafId);
+    render();
+  }
+
+  window.addEventListener('resize',function(){
+    clearTimeout(window._particles_resize_timeout);
+    window._particles_resize_timeout = setTimeout(init,120);
+  });
+
+  init();
+})();
+</script>
+</body>
+</html>

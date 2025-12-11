@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progresso | InstruMusic</title>
+
+    <style>
+        /* CSS Original (MANTIDO) */
+        * { margin: 0; 
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            
+            background: 
+                linear-gradient(rgba(0,0,0,0.60), rgba(0,0,0,0.60)),
+                url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1920&q=90");
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+    
+        .header {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:15px 30px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        nav a {
+            color: #cfcfcf;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px; /* Adicionado padding para hover/active */
+            border-radius: 5px;
+            transition: 0.25s;
+        }
+
+        nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        nav a:not(.active):hover {
+            color: #00aaff;
+            font-weight: bold;
+        }
+
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 14px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.35);
+        }
+
+        main {
+            padding-top: 120px;
+            padding-bottom: 40px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .light-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(14px);
+            color: #fff;
+            padding: 24px;
+            width: 92%;
+            max-width: 900px;
+            margin: 0 auto 40px auto;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.45);
+        }
+
+        .light-card h3 {
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .progress-item {
+            margin-bottom: 18px;
+        }
+
+        .progress-label {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: #ececec;
+            display: flex;
+            justify-content: space-between; /* Para separar o título do percentual */
+        }
+        .progress-title {
+            font-weight: 600;
+        }
+        .progress-percent {
+            color: #66ddff;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 14px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #00aaff, #66ddff);
+            width: 0;
+            transition: width 1.7s ease; /* Alterado de animation para transition */
+        }
+
+        /* Adicionado para feedback de carregamento */
+        #loadingContainer {
+            text-align: center;
+            padding: 50px 0;
+            font-size: 1.2rem;
+            color: #00aaff;
+        }
+        
+        /* Chave CSS para a transição dos preenchimentos da barra, será aplicada via JS */
+        /* Removido o @keyframes e definido 'transition: width 1.7s ease;' no .progress-fill */
+
+
+        footer {
+            text-align: center;
+            padding: 18px;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+    </style>
+
+</head>
+<body>
+
+    <canvas id="particles-js"></canvas>
+
+    <header class="header">
+        <a href="/public/pages/index.html" class="logo">InstruMusic</a>
+
+        <nav>
+            <a href="/public/pages/meus-cursos.html">Meus Cursos</a>
+            <a href="/public/pages/progresso.html" class="active">Progresso</a>
+            <a href="/public/pages/perfil.html">Perfil</a>
+        </nav>
+
+        <button class="btn-logout" id="logoutBtn">Sair</button>
+    </header>
+
+    <main>
+        <h2>Meu Progresso de Aprendizado</h2>
+
+        <div id="loadingContainer">Carregando seus dados de progresso...</div>
+
+        <div class="light-card" id="summaryCard" style="display:none;">
+            <h3>Seu Resumo</h3>
+
+            <p><strong>Instrumento Escolhido:</strong> <span id="instrumentoEscolhido">Carregando...</span></p>
+            <p><strong>Próxima Aula:</strong> <span id="proximaAula">Carregando...</span></p>
+            <p><strong>Material de Apoio:</strong> 
+                <a href="/public/pages/materiais.html" style="color:#66ddff;">Ver Partituras Iniciais</a>
+            </p>
+        </div>
+
+        <div class="light-card" id="progressBarsCard" style="display:none;">
+            <h3>Progresso das Aulas</h3>
+            <div id="progressContainer">
+                </div>
+        </div>
+
+        <div class="light-card" id="errorCard" style="display:none; background: rgba(255,0,0,0.1); border-color: rgba(255,0,0,0.3);">
+            <h3>Erro ao Carregar</h3>
+            <p id="errorMessage">Não foi possível carregar o seu progresso. Por favor, tente novamente.</p>
+        </div>
+
+    </main>
+
+    <footer>
+        © 2025 InstruMusic. Todos os direitos reservados.
+    </footer>
+
+    <script>
+    (function(){
+    const canvas = document.getElementById('particles-js');
+    const ctx = canvas.getContext('2d');
+    if(!ctx) return;
+
+    let DPR = window.devicePixelRatio || 1;
+    let W = 0, H = 0;
+    const particles = [];
+    const PARTICLE_COUNT = 80;
+    const CONNECT_DISTANCE = 120;
+    const notes = ["\u266A", "\u266B"]; 
+
+    function setSize(){
+        DPR = window.devicePixelRatio || 1;
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.style.width = W+'px';
+        canvas.style.height = H+'px';
+        canvas.width = Math.floor(W * DPR);
+        canvas.height = Math.floor(H * DPR);
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+
+    function Particle(){
+        this.reset();
+    }
+
+    Particle.prototype.reset = function(){
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.size = Math.random() * 16 + 8; 
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.alpha = 0.3 + Math.random() * 0.7;
+        this.note = notes[Math.floor(Math.random() * notes.length)];
+        this.rotation = Math.random() * 2 * Math.PI;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+    }
+
+    Particle.prototype.update = function(){
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rotation += this.rotationSpeed;
+
+        if(this.x < -20) this.x = W + 20;
+        if(this.x > W + 20) this.x = -20;
+        if(this.y < -20) this.y = H + 20;
+        if(this.y > H + 20) this.y = -20;
+    }
+
+    Particle.prototype.draw = function(){
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.fillStyle = "#fff";
+        ctx.font = `${this.size}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(this.note, 0, 0);
+        ctx.restore();
+    }
+
+    function connectParticles(){
+        for(let i=0;i<particles.length;i++){
+        for(let j=i+1;j<particles.length;j++){
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if(dist < CONNECT_DISTANCE){
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - dist/CONNECT_DISTANCE) * 0.25) + ')';
+            ctx.lineWidth = 1;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+            }
+        }
+        }
+    }
+
+    function initParticles(){
+        particles.length = 0;
+        for(let i=0;i<PARTICLE_COUNT;i++) particles.push(new Particle());
+    }
+
+    let rafId = null;
+    function render(){
+        ctx.clearRect(0,0,W,H);
+        connectParticles();
+        for(let p of particles) p.update(), p.draw();
+        rafId = requestAnimationFrame(render);
+    }
+
+    function init(){
+        setSize();
+        initParticles();
+        if(rafId) cancelAnimationFrame(rafId);
+        render();
+    }
+
+    window.addEventListener('resize',function(){
+        clearTimeout(window._particles_resize_timeout);
+        window._particles_resize_timeout = setTimeout(init,120);
+    });
+
+    init();
+    })();
+    </script>
+    
+    <script src="/public/js/auth.js"></script> 
+    <script>
+    const loadingContainer = document.getElementById('loadingContainer');
+    const summaryCard = document.getElementById('summaryCard');
+    const progressBarsCard = document.getElementById('progressBarsCard');
+    const errorCard = document.getElementById('errorCard');
+    const progressContainer = document.getElementById('progressContainer');
+    const token = localStorage.getItem('userToken');
+
+    // Simulação de dados retornados pela API (Backend)
+    const mockProgressData = {
+        instrumentoPrincipal: "Piano Clássico",
+        proximaAula: "Escalas Maiores - Módulo 3",
+        progressoModulos: [
+            { titulo: "Introdução ao Instrumento", percentual: 100 },
+            { titulo: "Fundamentos da Teoria Musical", percentual: 85 },
+            { titulo: "Acordes Básicos", percentual: 75 },
+            { titulo: "Ritmos Iniciais", percentual: 50 },
+            { titulo: "Técnicas de Dedilhado", percentual: 20 },
+            { titulo: "Leitura de Partituras", percentual: 10 }
+        ]
+    };
+
+    function displayError(message) {
+        loadingContainer.style.display = 'none';
+        summaryCard.style.display = 'none';
+        progressBarsCard.style.display = 'none';
+        errorCard.style.display = 'block';
+        document.getElementById('errorMessage').textContent = message;
+    }
+
+    function renderProgressBars(progressItems) {
+        progressContainer.innerHTML = ''; // Limpa o container
+        progressItems.forEach(item => {
+            const safePercent = Math.min(100, Math.max(0, item.percentual)); // Limita entre 0 e 100
+            
+            const html = `
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span class="progress-title">${item.titulo}</span>
+                        <span class="progress-percent">${safePercent}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${safePercent}%;"></div>
+                    </div>
+                </div>
+            `;
+            progressContainer.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    // Função principal para buscar dados
+    async function fetchProgressData() {
+        if (!token) {
+            console.log("Token não encontrado. Redirecionando para a página de entrada.");
+            window.location.href = '/public/pages/entry.html'; 
+            return;
+        }
+
+        try {
+            // Em uma aplicação real, você faria o fetch da API aqui:
+            // const response = await fetch('http://localhost:3000/api/progresso', { ... });
+            // const data = await response.json();
+            
+            // SIMULAÇÃO: Usando dados mock para visualização
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Simula delay da rede
+            const data = mockProgressData;
+
+            // Preencher Card de Resumo
+            document.getElementById('instrumentoEscolhido').textContent = data.instrumentoPrincipal;
+            document.getElementById('proximaAula').textContent = data.proximaAula;
+
+            // Renderizar Barras de Progresso
+            renderProgressBars(data.progressoModulos);
+
+            // Mostrar Cards e esconder Loading
+            loadingContainer.style.display = 'none';
+            summaryCard.style.display = 'block';
+            progressBarsCard.style.display = 'block';
+
+        } catch (error) {
+            console.error('Erro ao carregar o progresso:', error);
+            if (error.message.includes('401')) {
+                fazerLogout(); // Redireciona se a sessão expirou
+            } else {
+                displayError('Ocorreu um erro ao carregar o seu progresso. (' + error.message + ')');
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Inicia o Carregamento dos Dados
+        fetchProgressData();
+
+        // 2. Configura o Botão de Logout
+        const logoutButton = document.getElementById('logoutBtn');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', fazerLogout); // Usa a função de auth.js
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Flauta | InstruMusic</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color:#eee;
+    min-height:100vh;
+    background: linear-gradient(135deg,#1e1e1e,#2c2c2c,#1e1e1e,#3a3a3a);
+    background-size:400% 400%;
+    animation: gradientBG 22s ease infinite;
+    overflow-x:hidden;
+  }
+  @keyframes gradientBG{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+  #background-img{
+    position:fixed;inset:0;
+    z-index:-4;
+    background: url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1920&q=90") center/cover no-repeat;
+    filter:brightness(0.38);
+  }
+
+  #particles-js{
+    position:fixed;left:0;top:0;
+    width:100vw;height:100vh;
+    z-index:-3;
+    pointer-events:none;
+    display:block;
+  }
+
+  header.main-header{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:15px 30px;
+  }
+  .logo{font-weight:700;color:#fff;text-decoration:none;font-size:1.4rem}
+  nav.main-nav a{margin-left:12px;color:#eee;text-decoration:none;font-size:0.95rem}
+
+  .btn{display:inline-block;padding:10px 18px;border-radius:8px;font-weight:700;text-decoration:none;cursor:pointer}
+  .btn-secondary{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.15)}
+  .btn-secondary:hover{background:#fff;color:#111}
+  .btn-primary{background:#d30404;color:#111}
+  .btn-primary:hover{opacity:.9}
+
+  main.content-section{
+    position:relative;z-index:2;
+    max-width:920px;margin:60px auto;padding:26px;
+    background: rgba(18,18,18,0.54);
+    border-radius:12px;backdrop-filter: blur(8px);
+    border:1px solid rgba(255,255,255,0.06);
+  }
+   .instrument-image-large {
+    display: block;
+    margin: 0 auto 25px auto;
+    max-width: 35%; 
+    height: auto;   
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+  @media(max-width:600px){
+    header.main-header{flex-direction:column;gap:10px}
+    nav.main-nav{display:flex;flex-wrap:wrap;justify-content:center}
+    main.content-section{margin:40px 12px;padding:18px}
+  }
+</style>
+</head>
+<body>
+
+<div id="background-img" aria-hidden="true"></div>
+<canvas id="particles-js" aria-hidden="true"></canvas>
+
+<header class="main-header" role="banner">
+  <a class="logo" href="/public/pages/index.html">InstruMusic</a>
+  <nav class="main-nav" role="navigation" aria-label="Main">
+    <a class="nav-item" href="#">Meus Cursos</a>
+    <a class="nav-item" href="/public/pages/progresso.html">Progresso</a>
+    <a class="nav-item" href="/public/pages/perfil.html">Perfil</a>
+    <a class="btn btn-secondary" href="/public/pages/login.html">Login</a>
+    <a class="btn btn-primary" href="/public/pages/register.html">Criar Conta</a>
+  </nav>
+</header>
+
+<main class="content-section" role="main">
+  <img
+    src="/public/img/flauta.webp"
+    alt="Flauta Transversal"
+    class="instrument-image-large"
+    onerror="(function(i){ i.onerror=null; i.src='../public/img/flauta.webp'; })(this)"
+  >
+
+  <h1>Aprenda a tocar Flauta</h1>
+
+  <p>A flauta, seja transversal ou doce, possui um timbre suave e cristalino.
+     Em nossos cursos você aprenderá técnicas de sopro, digitação, afinação, articulação
+     e controle expressivo, além de explorar repertórios variados do clássico ao popular.</p>
+
+  <h2>Cursos Disponíveis</h2>
+  <ul class="course-list">
+    <li>Técnicas de Sopro e Emissão de Som</li>
+    <li>Digitação Rápida e Correta</li>
+    <li>Articulação e Expressividade Musical</li>
+    <li>Flauta em Conjuntos e Música Popular</li>
+  </ul>
+</main>
+
+<footer role="contentinfo">
+  <p>© 2025 InstruMusic. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+(function(){
+  const canvas = document.getElementById('particles-js');
+  const ctx = canvas.getContext('2d');
+  if(!ctx) return;
+
+  let DPR = window.devicePixelRatio || 1;
+  let W = 0, H = 0;
+  const particles = [];
+  const PARTICLE_COUNT = 80;
+  const CONNECT_DISTANCE = 120;
+  const notes = ["\u266A", "\u266B"]; 
+
+  function setSize(){
+    DPR = window.devicePixelRatio || 1;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.style.width = W+'px';
+    canvas.style.height = H+'px';
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+
+  function Particle(){
+    this.reset();
+  }
+
+  Particle.prototype.reset = function(){
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.size = Math.random() * 16 + 8; 
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.6;
+    this.alpha = 0.3 + Math.random() * 0.7;
+    this.note = notes[Math.floor(Math.random() * notes.length)];
+    this.rotation = Math.random() * 2 * Math.PI;
+    this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+  }
+
+  Particle.prototype.update = function(){
+    this.x += this.vx;
+    this.y += this.vy;
+    this.rotation += this.rotationSpeed;
+
+    if(this.x < -20) this.x = W + 20;
+    if(this.x > W + 20) this.x = -20;
+    if(this.y < -20) this.y = H + 20;
+    if(this.y > H + 20) this.y = -20;
+  }
+
+  Particle.prototype.draw = function(){
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.fillStyle = "#fff";
+    ctx.font = `${this.size}px Arial`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(this.note, 0, 0);
+    ctx.restore();
+  }
+
+  function connectParticles(){
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < CONNECT_DISTANCE){
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - dist/CONNECT_DISTANCE) * 0.25) + ')';
+          ctx.lineWidth = 1;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function initParticles(){
+    particles.length = 0;
+    for(let i=0;i<PARTICLE_COUNT;i++) particles.push(new Particle());
+  }
+
+  let rafId = null;
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    connectParticles();
+    for(let p of particles) p.update(), p.draw();
+    rafId = requestAnimationFrame(render);
+  }
+
+  function init(){
+    setSize();
+    initParticles();
+    if(rafId) cancelAnimationFrame(rafId);
+    render();
+  }
+
+  window.addEventListener('resize',function(){
+    clearTimeout(window._particles_resize_timeout);
+    window._particles_resize_timeout = setTimeout(init,120);
+  });
+
+  init();
+})();
+</script>
+
+</body>
+</html>

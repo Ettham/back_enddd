@@ -1,0 +1,128 @@
+/* public/css/instrumentos.css - Estilo Específico da Página de Instrumentos e Detalhes */
+
+/* --- Estilos do Grid de Instrumentos (instrumentos.html) --- */
+.instruments-section {
+    padding-top: 50px; 
+}
+
+.instrument-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.instrument-card {
+    background-color: var(--color-medium-bg);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.instrument-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(255, 0, 51, 0.2); 
+}
+
+.instrument-card img {
+    width: 100%;          
+    max-height: 120px;    /* Altura ajustada para uniformidade (melhora o grid) */
+    object-fit: contain; 
+    margin-bottom: 15px;
+    padding: 10px;        
+    transition: transform 0.3s ease; 
+}
+
+.instrument-card img:hover {
+    transform: scale(1.05); 
+}
+
+/* --- Estilos da Página de Detalhe (guitarra.html, bateria.html, etc.) --- */
+
+.instrument-detail {
+    max-width: 900px; /* Limita a largura para o conteúdo */
+    margin: 40px auto; /* Centraliza o bloco na página */
+    padding: 30px;
+    background-color: var(--color-medium-bg);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center; 
+}
+
+.instrument-detail .instrument-image-large {
+    max-width: 70%;  /* CHAVE: Controla o tamanho da imagem na página de detalhe */
+    height: auto;     
+    margin: 0 auto 30px auto; /* Centraliza e adiciona margem inferior */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.instrument-detail h1 {
+    color: var(--color-primary);
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.instrument-detail p {
+    font-size: 1.1em;
+    line-height: 1.7;
+    color: var(--color-text-light);
+    margin-bottom: 25px;
+    text-align: justify; /* Torna o bloco de texto mais organizado */
+}
+
+.instrument-detail h2 {
+    font-size: 1.8em;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: var(--color-text-light);
+    text-align: center;
+}
+
+/* Estilo para a Lista de Cursos */
+.course-list {
+    list-style: none; /* Remove os bullets padrão */
+    padding: 0;
+    margin: 0 auto 30px auto;
+    max-width: 500px; /* Limita a largura da lista para melhor leitura */
+}
+
+.course-list li {
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 1.05em;
+    color: var(--color-text-light);
+    text-align: left; 
+    border-bottom: 1px solid var(--color-light-bg);
+}
+
+.course-list li:before {
+    content: "🎵"; /* Adiciona o ícone musical */
+    margin-right: 10px;
+    color: var(--color-primary);
+}
+
+.instrument-detail .btn {
+    margin-top: 20px;
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 900px) {
+    .instrument-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 768px) {
+    .instrument-detail {
+        margin: 20px auto;
+        padding: 20px;
+    }
+    .instrument-detail .instrument-image-large {
+        max-width: 95%; /* Ocupa quase toda a largura do celular */
+    }
+    .instrument-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

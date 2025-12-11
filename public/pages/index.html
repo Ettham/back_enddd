@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstruMusic: Aprenda, Crie, Transforme!</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/public/css/index.css">
+</head>
+
+<body>
+
+    <header class="main-header transparent-header">
+        <div class="logo">InstruMusic</div>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a href="/public/pages/sobre.html">Sobre</a></li>
+                <li><a href="/public/pages/instrumentos.html">Instrumentos</a></li>
+                <li><a href="/public/pages/depoimentos.html">Depoimentos</a></li>
+            </ul>
+        </nav>
+        
+        <div id="auth-controls">
+            <a class="login-btn" href="/public/pages/entry.html">Login / Cadastro</a>
+        </div>
+        
+    </header>
+
+    <main class="hero-section hero-home">
+
+        <div class="slideshow">
+            <img src="/public/img/p1.png" class="slide active" alt="Slide 1">
+            <img src="/public/img/p2.png" class="slide" alt="Slide 2">
+            <img src="/public/img/p3.png" class="slide" alt="Slide 3">
+            <img src="/public/img/p4.png" class="slide" alt="Slide 4">
+            <img src="/public/img/p5.png" class="slide" alt="Slide 5">
+            <img src="/public/img/p6.png" class="slide" alt="Slide 6">
+        </div>
+
+        <div class="hero-content">
+            <h1>InstruMusic: Aprenda, Crie, Transforme!</h1>
+            <p>Sua jornada musical gratuita começa aqui.</p>
+            <a href="/public/pages/instrumentos.html" class="btn btn-secondary">Comece a Aprender</a>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let index = 0;
+            const slides = document.querySelectorAll(".slide");
+
+            function mudarImagem() {
+                slides[index].classList.remove("active");
+                index = (index + 1) % slides.length;
+                slides[index].classList.add("active");
+            }
+
+            setInterval(mudarImagem, 2500);
+        });
+    </script>
+    <script src="/public/js/script.js"></script>
+    <script src="/public/js/auth.js"></script> 
+
+</body>
+</html>

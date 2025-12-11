@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil | InstruMusic</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    
+    <style>
+        /* CSS Base (Similar ao Dashboard) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Fundo com Imagem, Overlay Escuro e Fixo */
+            background: linear-gradient(rgba(0,0,0,0.60), rgba(0,0,0,0.60)), url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1920&q=90") center/cover no-repeat fixed;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        /* Canvas para o efeito de partículas */
+        #particles-js { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        
+        /* Header */
+        .header { display:flex; justify-content:space-between; align-items:center; padding:15px 30px; }
+        .logo { font-size: 22px; font-weight: bold; color: white; text-decoration: none; }
+        nav { display: flex; gap: 24px; }
+        nav a { color: #cfcfcf; text-decoration: none; font-size: 16px; padding: 8px 12px; border-radius: 5px; transition: 0.25s; }
+        nav a.active { background: rgba(255, 255, 255, 0.2); color: #fff; font-weight: 600; }
+        nav a:not(.active):hover { color: #00aaff; font-weight: bold; }
+        /* Estilo do botão de Logout (definido no auth.js como .login-btn, mas usando .btn-logout aqui) */
+        .btn-logout { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); padding: 8px 14px; border-radius: 8px; color: white; cursor: pointer; transition: .25s; }
+        .btn-logout:hover { background: rgba(255,255,255,0.35); }
+
+        /* Perfil Content */
+        main { padding: 80px 20px; max-width: 600px; margin: 0 auto; }
+        h2 { text-align: center; margin-bottom: 40px; font-size: 32px; color: #66ddff; text-shadow: 0 0 10px rgba(102, 221, 255, 0.4); }
+
+        .profile-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 14px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .profile-icon {
+            font-size: 60px;
+            color: #00aaff;
+            margin-bottom: 10px;
+        }
+        .profile-header h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .profile-header p {
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .profile-detail {
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        .profile-detail:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .detail-icon {
+            font-size: 20px;
+            color: #66ddff;
+            margin-right: 15px;
+            width: 30px; 
+            text-align: center;
+        }
+        .detail-label {
+            font-weight: 600;
+            width: 120px;
+            color: #ccc;
+        }
+        .detail-value {
+            flex-grow: 1;
+        }
+
+        .btn-edit {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 25px;
+            background: #e63946;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-edit:hover {
+            background: #d62839;
+            transform: translateY(-1px);
+        }
+        
+        #loadingContainer {
+            text-align: center;
+            padding: 50px 0;
+            font-size: 1.2rem;
+            color: #00aaff;
+        }
+        #errorContainer {
+            background: rgba(255,0,0,0.1); 
+            border: 1px solid rgba(255,0,0,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        /* Footer */
+        footer { text-align: center; padding: 18px; color: #ccc; font-size: 0.9rem; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles-js"></canvas>
+
+    <header class="header">
+        <a href="/public/pages/index.html" class="logo">InstruMusic</a>
+
+        <nav>
+            </nav>
+
+        <button class="btn-logout" id="logoutBtn">Sair</button>
+    </header>
+
+    <main>
+        <h2>Configurações do Perfil</h2>
+
+        <div id="loadingContainer">Carregando dados do usuário...</div>
+        <div id="errorContainer">Não foi possível carregar os dados do seu perfil. Verifique sua conexão.</div>
+
+        <div class="profile-card" id="profileCard" style="display:none;">
+            <div class="profile-header">
+                <i class="ri-user-smile-line profile-icon"></i> 
+                <h3 id="userName">Nome Completo do Usuário</h3>
+                <p>Membro desde <span id="memberSince">Junho de 2024</span></p>
+            </div>
+
+            <div class="profile-details-container">
+                
+                <div class="profile-detail">
+                    <i class="ri-mail-fill detail-icon"></i> 
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value" id="userEmail">usuario@instrumusic.com</span>
+                </div>
+                
+                <div class="profile-detail">
+                    <i class="ri-music-fill detail-icon"></i> 
+                    <span class="detail-label">Instrumento:</span>
+                    <span class="detail-value" id="userInstrument">Piano Clássico</span>
+                </div>
+                
+                <div class="profile-detail">
+                    <i class="ri-medal-fill detail-icon"></i> 
+                    <span class="detail-label">Nível:</span>
+                    <span class="detail-value" id="userLevel">Intermediário</span>
+                </div>
+
+            </div>
+
+            <button class="btn-edit" onclick="window.location.href='/public/pages/editar-perfil.html'">Editar Perfil</button>
+        </div>
+    </main>
+
+    <footer>
+        © 2025 InstruMusic. Todos os direitos reservados.
+    </footer>
+
+    <script>
+    (function(){
+    const canvas = document.getElementById('particles-js');
+    if (!canvas) return; 
+    const ctx = canvas.getContext('2d');
+    if(!ctx) return;
+
+    let DPR = window.devicePixelRatio || 1;
+    let W = 0, H = 0;
+    const particles = [];
+    const PARTICLE_COUNT = 80;
+    const CONNECT_DISTANCE = 120;
+    const notes = ["\u266A", "\u266B"]; 
+
+    function setSize(){
+        DPR = window.devicePixelRatio || 1;
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.style.width = W+'px';
+        canvas.style.height = H+'px';
+        canvas.width = Math.floor(W * DPR);
+        canvas.height = Math.floor(H * DPR);
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+
+    function Particle(){ this.reset(); }
+
+    Particle.prototype.reset = function(){
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.size = Math.random() * 16 + 8; 
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.alpha = 0.3 + Math.random() * 0.7;
+        this.note = notes[Math.floor(Math.random() * notes.length)];
+        this.rotation = Math.random() * 2 * Math.PI;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+    }
+
+    Particle.prototype.update = function(){
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rotation += this.rotationSpeed;
+        if(this.x < -20) this.x = W + 20;
+        if(this.x > W + 20) this.x = -20;
+        if(this.y < -20) this.y = H + 20;
+        if(this.y > H + 20) this.y = -20;
+    }
+
+    Particle.prototype.draw = function(){
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.fillStyle = "#fff";
+        ctx.font = `${this.size}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(this.note, 0, 0);
+        ctx.restore();
+    }
+
+    function connectParticles(){
+        for(let i=0;i<particles.length;i++){
+        for(let j=i+1;j<particles.length;j++){
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if(dist < CONNECT_DISTANCE){
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - dist/CONNECT_DISTANCE) * 0.25) + ')';
+            ctx.lineWidth = 1;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+            }
+        }
+        }
+    }
+
+    function initParticles(){
+        particles.length = 0;
+        for(let i=0;i<PARTICLE_COUNT;i++) particles.push(new Particle());
+    }
+
+    let rafId = null;
+    function render(){
+        ctx.clearRect(0,0,W,H);
+        connectParticles();
+        for(let p of particles) p.update(), p.draw();
+        rafId = requestAnimationFrame(render);
+    }
+
+    function init(){
+        setSize();
+        initParticles();
+        if(rafId) cancelAnimationFrame(rafId);
+        render();
+    }
+
+    window.addEventListener('resize',function(){
+        clearTimeout(window._particles_resize_timeout);
+        window._particles_resize_timeout = setTimeout(init,120);
+    });
+
+    init();
+    })();
+    </script>
+    
+    <script src="/public/js/auth.js"></script> 
+    
+    <script>
+    const loadingContainer = document.getElementById('loadingContainer');
+    const profileCard = document.getElementById('profileCard');
+    const errorContainer = document.getElementById('errorContainer');
+    const token = localStorage.getItem('userToken');
+
+    // MOCK: Simulação de dados do usuário
+    function getMockUserData() {
+        // Tenta carregar dados editados do localStorage (via editar-perfil.html)
+        const storedData = localStorage.getItem('userData');
+        if (storedData) {
+            try {
+                return JSON.parse(storedData);
+            } catch (e) {
+                console.error("Erro ao parsear dados do usuário:", e);
+            }
+        }
+        
+        // Dados padrão (se não houver nada no localStorage)
+        return {
+            username: "Júlia Moraes",
+            email: "julia.moraes@instrumusic.com",
+            instrument: "Piano Clássico",
+            level: "Intermediário",
+            memberSince: "15 de junho de 2024" // Usando o formato PT-BR diretamente
+        };
+    }
+    
+    // Função para formatar a data de membro (se necessário)
+    function formatMemberSince(dateString) {
+        // Se já estiver no formato PT-BR, retorna direto
+        if (dateString.includes('de ')) {
+            return dateString;
+        }
+        // Se for uma string de data (ex: "2024-06-15"), formata:
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' });
+        } catch(e) {
+            return dateString;
+        }
+    }
+
+    function displayError(message) {
+        loadingContainer.style.display = 'none';
+        profileCard.style.display = 'none';
+        errorContainer.textContent = message;
+        errorContainer.style.display = 'block';
+    }
+
+    async function fetchUserData() {
+        if (!token) {
+            console.log("Token não encontrado. Redirecionando para a página de entrada.");
+            window.location.href = '/public/pages/entry.html'; 
+            return;
+        }
+
+        try {
+            // SIMULAÇÃO: Espera 1 segundo para simular o tempo de carregamento da API
+            await new Promise(resolve => setTimeout(resolve, 1000)); 
+            const data = getMockUserData();
+            
+            // Preencher o Card de Perfil
+            document.getElementById('userName').textContent = data.username;
+            document.getElementById('userEmail').textContent = data.email;
+            document.getElementById('userInstrument').textContent = data.instrument;
+            document.getElementById('userLevel').textContent = data.level;
+            document.getElementById('memberSince').textContent = formatMemberSince(data.memberSince);
+
+            // Mostrar Card e esconder Loading
+            loadingContainer.style.display = 'none';
+            profileCard.style.display = 'block';
+
+        } catch (error) {
+            console.error('Erro ao carregar o perfil:', error);
+            // Em caso de erro real de API (401), o auth.js faria o logout.
+            displayError('Ocorreu um erro ao carregar o seu perfil. Por favor, tente novamente.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Inicia o Carregamento dos Dados
+        fetchUserData();
+        
+        // 2. O botão de Logout agora é configurado pelo auth.js, mas mantemos o ID para o script externo
+    });
+    </script>
+</body>
+</html>

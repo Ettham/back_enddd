@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Cursos | InstruMusic</title>
+
+    <link rel="stylesheet" href="/public/css/styles.css"> 
+    <link rel="stylesheet" href="/public/css/dashboard.css">
+
+    <style>
+        /* SEU CSS AQUI (MANTIDO INTACTO) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1920&q=90");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(2px);
+            z-index: -2;
+        }
+
+        #particles-js {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .main-header.header-public {
+          display:flex; justify-content:space-between; align-items:center;
+          padding:15px 30px;
+        }
+
+        .logo a {
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+            text-shadow: 0 0 10px #5af;
+            transition: 0.3s;
+        }
+
+        .main-nav .nav-item {
+            margin-right: 15px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #eee;
+            transition: 0.2s;
+        }
+
+        .main-nav .nav-item:hover {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 140, 255, 0.25);
+            border: 1px solid rgba(0,140,255,0.4);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(0,140,255,0.5);
+        }
+
+        .btn-secondary.btn-small {
+            background: rgba(255,255,255,0.12) !important;
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(8px);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin: 40px 0 30px;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(0,140,255,0.6);
+        }
+
+        .dashboard-widgets {
+            display: flex;
+            gap: 25px;
+            padding: 0 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .widget {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            width: 300px;
+            transition: 0.3s;
+            box-shadow: 0 0 25px rgba(0,0,0,0.4);
+        }
+
+        .widget:hover {
+            background: rgba(255,255,255,0.13);
+            transform: translateY(-5px);
+        }
+
+        .widget h3 {
+            color: #7bbdff;
+            margin-bottom: 8px;
+        }
+
+        .widget p {
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #ccc;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="particles-js"></canvas>
+
+    <header class="main-header header-public">
+        <div class="logo"><a href="/public/pages/index.html">InstruMusic</a></div>
+
+        <nav class="main-nav" id="mainNav">
+            <a href="/public/pages/meus-cursos.html" class="nav-item active">Meus Cursos</a>
+            <a href="/public/pages/progresso.html" class="nav-item">Progresso</a>
+            <a href="/public/pages/perfil.html" class="nav-item">Perfil</a>
+        </nav>
+
+        <button class="btn btn-secondary btn-small" id="logoutBtn">Sair</button>
+    </header>
+
+    <main class="content-section dashboard-section">
+        <h2 class="section-title">Meus Cursos Ativos</h2>
+
+        <div class="dashboard-widgets">
+
+            <div class="widget">
+                <h3>Guitarra Elétrica</h3>
+                <p>Nível: Iniciante • Aulas restantes: 12</p>
+                <a href="/public/instrumentos/guitarra.html" class="btn btn-secondary btn-small">Continuar Aula</a>
+            </div>
+
+            <div class="widget">
+                <h3>Violino Clássico</h3>
+                <p>Nível: Intermediário • Progresso: 75%</p>
+                <a href="/public/pages/progresso.html" class="btn btn-primary btn-small">Ver Progresso</a>
+            </div>
+
+            <div class="widget">
+                <h3>Bateria</h3>
+                <p>Nível: Fundamental • Aulas restantes: 2</p>
+                <a href="/public/instrumentos/bateria.html" class="btn btn-secondary btn-small">Continuar Aula</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 InstruMusic. Todos os direitos reservados.</p>
+    </footer>
+
+<script>
+(function(){
+  const canvas = document.getElementById('particles-js');
+  const ctx = canvas.getContext('2d');
+  if(!ctx) return;
+
+  let DPR = window.devicePixelRatio || 1;
+  let W = 0, H = 0;
+  const particles = [];
+  const PARTICLE_COUNT = 80;
+  const CONNECT_DISTANCE = 120;
+  const notes = ["\u266A", "\u266B"]; 
+
+  function setSize(){
+    DPR = window.devicePixelRatio || 1;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.style.width = W+'px';
+    canvas.style.height = H+'px';
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+
+  function Particle(){
+    this.reset();
+  }
+
+  Particle.prototype.reset = function(){
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.size = Math.random() * 16 + 8; 
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.6;
+    this.alpha = 0.3 + Math.random() * 0.7;
+    this.note = notes[Math.floor(Math.random() * notes.length)];
+    this.rotation = Math.random() * 2 * Math.PI; 
+    this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+  }
+
+  Particle.prototype.update = function(){
+    this.x += this.vx;
+    this.y += this.vy;
+    this.rotation += this.rotationSpeed;
+
+    if(this.x < -20) this.x = W + 20;
+    if(this.x > W + 20) this.x = -20;
+    if(this.y < -20) this.y = H + 20;
+    if(this.y > H + 20) this.y = -20;
+  }
+
+  Particle.prototype.draw = function(){
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.fillStyle = "#fff";
+    ctx.font = `${this.size}px Arial`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(this.note, 0, 0);
+    ctx.restore();
+  }
+
+  function connectParticles(){
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < CONNECT_DISTANCE){
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - dist/CONNECT_DISTANCE) * 0.25) + ')';
+          ctx.lineWidth = 1;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function initParticles(){
+    particles.length = 0;
+    for(let i=0;i<PARTICLE_COUNT;i++) particles.push(new Particle());
+  }
+
+  let rafId = null;
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    connectParticles();
+    for(let p of particles) p.update(), p.draw();
+    rafId = requestAnimationFrame(render);
+  }
+
+  function init(){
+    setSize();
+    initParticles();
+    if(rafId) cancelAnimationFrame(rafId);
+    render();
+  }
+
+  window.addEventListener('resize',function(){
+    clearTimeout(window._particles_resize_timeout);
+    window._particles_resize_timeout = setTimeout(init,120);
+  });
+
+  init();
+})();
+</script>
+
+<script src="/public/js/auth.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Verificar Autenticação
+    if (!localStorage.getItem('userToken')) {
+        console.log("Token não encontrado. Redirecionando para a página de entrada.");
+        // Redireciona para o hub de login/cadastro
+        window.location.href = '/public/pages/entry.html'; 
+        return; // Pára a execução do script
+    }
+    
+    // 2. Configurar o Botão de Logout
+    const logoutButton = document.getElementById('logoutBtn');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function() {
+            // Chama a função global de logout definida em auth.js
+            fazerLogout();
+        });
+    }
+
+    // Opcional: Ajustar a navegação. Aqui já está no estado logado,
+    // mas chamo para manter a consistência com outras páginas logadas.
+    // ajustarNavegacao(); 
+});
+</script>
+</body>
+</html>

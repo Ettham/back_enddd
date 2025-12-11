@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Nossos Instrumentos | InstruMusic</title>
+
+    <style>
+        /* SEU CSS AQUI (MANTIDO INTACTO) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #eee;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+
+            /* Fundo da imagem original */
+            background-image: url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1920&q=90");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            /* Camada escura com blur sobre o fundo */
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(3px);
+            z-index: -1;
+        }
+
+        #particles-js {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Fica abaixo da camada escura e do conteúdo */
+        }
+
+        .main-header {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:15px 30px;
+        }
+
+        .main-header a {
+            color: #fff !important;
+        }
+
+        .logo a {
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-decoration: none;
+            /* Cor azul clara para destaque do logo */
+            text-shadow: 0 0 8px rgba(0,140,255,0.6); 
+        }
+
+        .main-nav a {
+            margin-left: 15px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            /* Estilo "Glassmorphism" para botões de navegação */
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .main-nav a:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .btn-primary {
+            /* Cor Vermelha Principal */
+            background-color: rgba(206, 6, 6, 0.9); 
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(206, 6, 6, 1);
+        }
+
+        .btn-secondary {
+            background-color: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .content-section {
+            flex-grow: 1;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-align: center;
+            color: #fff;
+        }
+
+        .instrument-grid {
+            display: grid;
+            /* Permite 3, 4 ou mais colunas dependendo do espaço */
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 25px;
+        }
+
+        .instrument-card {
+            background-color: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #eee;
+            transition: 0.3s ease;
+            /* Estilo Glassmorphism no card */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 0 20px rgba(0,0,0,0.35);
+        }
+
+        .instrument-card:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255,255,255,0.15);
+        }
+
+        .instrument-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .instrument-card h3 {
+            margin-bottom: 10px;
+            /* Cor azul clara para o título do instrumento */
+            color: #7bc7ff; 
+        }
+
+        footer {
+            background-color: rgba(0,0,0,0.55);
+            padding: 20px 0;
+            text-align: center;
+            color: #bbb;
+            margin-top: auto;
+            backdrop-filter: blur(6px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .main-header { flex-direction: column; gap: 15px; }
+            .main-nav { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="particles-js"></canvas>
+
+    <header class="main-header header-public">
+        <div class="logo"><a href="/public/pages/index.html">InstruMusic</a></div>
+        <nav class="main-nav" id="mainNav">
+            <a href="/public/pages/index.html" class="btn-secondary">Home</a>
+            <a href="/public/pages/cursos.html" class="btn-secondary">Cursos</a>
+            <a href="/public/pages/login.html" class="btn btn-primary btn-small">Login/Criar Conta</a>
+        </nav>
+        
+        <script>
+            // Adiciona a navegação completa, que o JS poderá ajustar depois
+            const mainNav = document.getElementById('mainNav');
+            if (mainNav.querySelector('.btn-secondary').textContent === 'Login/Criar Conta') {
+                mainNav.innerHTML = `
+                    <a href="/public/pages/index.html" class="btn-secondary">Home</a>
+                    <a href="/public/pages/cursos.html" class="btn-secondary">Cursos</a>
+                    <a href="/public/pages/instrumentos.html" class="btn-secondary" style="background: rgba(206, 6, 6, 0.25); border-color: rgba(206, 6, 6, 0.5);">Instrumentos</a>
+                    <a href="/public/pages/login.html" class="btn btn-primary btn-small">Login/Criar Conta</a>
+                `;
+            }
+        </script>
+    </header>
+
+    <main class="content-section instruments-section">
+        <h2 class="section-title">Explore Nossos Instrumentos</h2>
+
+        <div class="instrument-grid">
+
+            <a href="/public/instrumentos/guitarra.html" class="instrument-card">
+                <img src="/public/img/guitarra.png" alt="Guitarra Vermelha">
+                <h3>Guitarra</h3>
+                <p>Domine os riffs com estilo!</p>
+            </a>
+
+            <a href="/public/instrumentos/bateria.html" class="instrument-card">
+                <img src="/public/img/bateria.webp" alt="Bateria Acústica">
+                <h3>Bateria</h3>
+                <p>Entre no ritmo com energia!</p>
+            </a>
+
+            <a href="/public/instrumentos/teclado.html" class="instrument-card">
+                <img src="/public/img/teclado.png" alt="Teclado/Sintetizador">
+                <h3>Teclado</h3>
+                <p>Toque harmonias e melodias únicas.</p>
+            </a>
+
+            <a href="/public/instrumentos/violino.html" class="instrument-card">
+                <img src="/public/img/violino.png" alt="Violino Clássico">
+                <h3>Violino</h3>
+                <p>Emocione com notas clássicas e intensas.</p>
+            </a>
+
+            <a href="/public/instrumentos/flauta.html" class="instrument-card">
+                <img src="/public/img/flauta.webp" alt="Flauta Transversal">
+                <h3>Flauta</h3>
+                <p>Sopre suavidade com delicadeza.</p>
+            </a>
+
+            <a href="/public/instrumentos/trompete.html" class="instrument-card">
+                <img src="/public/img/trompete.png" alt="Trompete Dourado">
+                <h3>Trompete</h3>
+                <p>Encha o ar com sons vibrantes!</p>
+            </a>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 InstruMusic. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+(function(){
+    const canvas = document.getElementById('particles-js');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    if(!ctx) return;
+
+    let DPR = window.devicePixelRatio || 1;
+    let W = 0, H = 0;
+    const particles = [];
+    const PARTICLE_COUNT = 80;
+    const CONNECT_DISTANCE = 120;
+    const notes = ["\u266A", "\u266B"]; // Símbolos de notas musicais
+
+    function setSize(){
+     DPR = window.devicePixelRatio || 1;
+     W = window.innerWidth;
+     H = window.innerHeight;
+     canvas.style.width = W+'px';
+     canvas.style.height = H+'px';
+     canvas.width = Math.floor(W * DPR);
+     canvas.height = Math.floor(H * DPR);
+     ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+
+    function Particle(){
+     this.reset();
+    }
+
+    Particle.prototype.reset = function(){
+     this.x = Math.random() * W;
+     this.y = Math.random() * H;
+     this.size = Math.random() * 16 + 8; 
+     this.vx = (Math.random() - 0.5) * 0.6;
+     this.vy = (Math.random() - 0.5) * 0.6;
+     this.alpha = 0.3 + Math.random() * 0.7;
+     this.note = notes[Math.floor(Math.random() * notes.length)];
+     this.rotation = Math.random() * 2 * Math.PI; 
+     this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+    }
+
+    Particle.prototype.update = function(){
+     this.x += this.vx;
+     this.y += this.vy;
+     this.rotation += this.rotationSpeed;
+
+     if(this.x < -20) this.x = W + 20;
+     if(this.x > W + 20) this.x = -20;
+     if(this.y < -20) this.y = H + 20;
+     if(this.y > H + 20) this.y = -20;
+    }
+
+    Particle.prototype.draw = function(){
+     ctx.save();
+     ctx.globalAlpha = this.alpha;
+     ctx.translate(this.x, this.y);
+     ctx.rotate(this.rotation);
+     ctx.fillStyle = "#fff";
+     ctx.font = `${this.size}px Arial`;
+     ctx.textAlign = "center";
+     ctx.textBaseline = "middle";
+     ctx.fillText(this.note, 0, 0);
+     ctx.restore();
+    }
+
+    function connectParticles(){
+     for(let i=0;i<particles.length;i++){
+        for(let j=i+1;j<particles.length;j++){
+         const dx = particles[i].x - particles[j].x;
+         const dy = particles[i].y - particles[j].y;
+         const dist = Math.sqrt(dx*dx + dy*dy);
+         if(dist < CONNECT_DISTANCE){
+           ctx.beginPath();
+           ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - dist/CONNECT_DISTANCE) * 0.25) + ')';
+           ctx.lineWidth = 1;
+           ctx.moveTo(particles[i].x, particles[i].y);
+           ctx.lineTo(particles[j].x, particles[j].y);
+           ctx.stroke();
+         }
+        }
+     }
+    }
+
+    function initParticles(){
+     particles.length = 0;
+     for(let i=0;i<PARTICLE_COUNT;i++) particles.push(new Particle());
+    }
+
+    let rafId = null;
+    function render(){
+     ctx.clearRect(0,0,W,H);
+     connectParticles();
+     for(let p of particles) p.update(), p.draw();
+     rafId = requestAnimationFrame(render);
+    }
+
+    function init(){
+     setSize();
+     initParticles();
+     if(rafId) cancelAnimationFrame(rafId);
+     render();
+    }
+
+    window.addEventListener('resize',function(){
+     clearTimeout(window._particles_resize_timeout);
+     window._particles_resize_timeout = setTimeout(init,120);
+    });
+
+    init();
+})();
+</script>
+
+    <script src="/public/js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chama a função global definida em auth.js para checar o token
+            // e renderizar o menu de navegação correto no elemento #mainNav.
+            // Nota: Se você não tiver um arquivo auth.js, esta linha deve ser removida ou o script deve ser criado.
+            // ajustarNavegacao(); 
+        });
+    </script>
+</body>
+</html>

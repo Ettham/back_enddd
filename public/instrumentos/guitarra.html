@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Guitarra | InstruMusic</title>
+<style>
+  
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color:#eee;
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  #background-img{
+    position:fixed;inset:0;
+    z-index:-5;
+    background: url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1920&q=90") center/cover no-repeat;
+    filter: brightness(0.38);
+  }
+
+  #gradient-overlay {
+    position:fixed;inset:0;
+    z-index:-4;
+    background: linear-gradient(135deg,#1e1e1e80,#2c2c2c80,#1e1e1e80,#3a3a3a80);
+    background-size:400% 400%;
+    animation: gradientBG 22s ease infinite;
+  }
+
+  @keyframes gradientBG{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+  #particles-js{
+    position:fixed;left:0;top:0;
+    width:100vw;height:100vh;
+    z-index:-3;
+    pointer-events:none;
+  }
+
+  header.main-header{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:15px 30px;
+  }
+  .logo{font-weight:700;color:#fff;text-decoration:none;font-size:1.6rem}
+  nav.main-nav a{margin-left:18px;color:#eee;text-decoration:none;font-size:0.95rem}
+  nav.main-nav a:hover{color:#ff4141}
+
+  .btn{display:inline-block;padding:8px 14px;border-radius:8px;font-weight:700;text-decoration:none;cursor:pointer;font-size:0.85rem}
+  .btn-secondary{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.15)}
+  .btn-secondary:hover{background:#fff;color:#111}
+  .btn-primary{background:#ff4141;color:#fff;border:2px solid #ff4141}
+  .btn-primary:hover{background:#ff6363}
+
+  main.content-section{
+    position:relative;z-index:2;
+    max-width:900px;margin:80px auto;padding:35px;
+    background: rgba(30,30,30,0.75);
+    border-radius:12px;backdrop-filter: blur(8px);
+    box-shadow:0 0 30px rgba(0,0,0,0.5);
+  }
+.instrument-image-large {
+    display: block;
+    margin: 0 auto 25px auto;
+    max-width: 35%; 
+    height: auto;   
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+
+  h1{font-size:2.2rem;margin-bottom:20px;color:#ff4141;text-align:center}
+  h2{margin-top:30px;margin-bottom:12px;font-size:1.6rem;color:#fff;border-bottom:2px solid rgba(255,255,255,0.1);padding-bottom:5px}
+  p{margin-bottom:18px;line-height:1.7;text-align:justify}
+  ul.course-list{margin-left:25px;line-height:1.8}
+  ul.course-list li{padding-left:5px;transition:color 0.3s}
+  ul.course-list li:hover{color:#ff4141}
+
+  footer{position:relative;z-index:2;text-align:center;padding:20px;color:#bbb;margin-top:30px}
+</style>
+</head>
+<body>
+
+<div id="background-img"></div>
+<div id="gradient-overlay"></div>
+<canvas id="particles-js"></canvas>
+
+<header class="main-header">
+  <a href="/public/pages/index.html" class="logo">InstruMusic</a>
+  <nav class="main-nav">
+    <a href="#">Meus Cursos</a>
+    <a href="/public/pages/progresso.html">Progresso</a>
+    <a href="/public/pages/perfil.html">Perfil</a>
+    <a href="/public/pages/login.html" class="btn btn-secondary">Login</a>
+    <a href="/public/pages/register.html" class="btn btn-primary">Criar Conta</a>
+  </nav>
+</header>
+
+<main class="content-section instrument-detail">
+  <img src="/public/img/guitarra.png" class="instrument-image-large" alt="Imagem de uma guitarra elétrica">
+
+  <h1>Aprenda a tocar Guitarra</h1>
+  <p>A guitarra é um dos instrumentos mais versáteis e populares do mundo, essencial em rock, blues e pop. 
+     Nossos cursos cobrem desde acordes básicos até técnicas avançadas de solo, escalas e improvisação.</p>
+
+  <h2>Cursos Disponíveis</h2>
+  <ul class="course-list">
+    <li>Acordes e Riffs para Iniciantes</li>
+    <li>Escalas e Improvisação</li>
+    <li>Técnicas Avançadas (Bend, Vibrato, Tapping)</li>
+    <li>Estudo do Rock e Blues</li>
+  </ul>
+
+  <div style="text-align:center;margin-top:40px;">
+    <a href="#" class="btn btn-primary" style="font-size:1.1rem;padding:12px 25px;">Começar Agora!</a>
+  </div>
+</main>
+
+<footer>
+  <p>© 2025 InstruMusic. Todos os direitos reservados.</p>
+</footer>
+<script>
+(function(){
+  const canvas = document.getElementById('particles-js');
+  const ctx = canvas.getContext('2d');
+  if(!ctx) return;
+
+  let DPR = window.devicePixelRatio || 1;
+  let W = 0, H = 0;
+  const particles = [];
+  const PARTICLE_COUNT = 80;
+  const CONNECT_DISTANCE = 120;
+  const notes = ["\u266A", "\u266B"]; 
+
+  function setSize(){
+    DPR = window.devicePixelRatio || 1;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.style.width = W+'px';
+    canvas.style.height = H+'px';
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+
+  function Particle(){
+    this.reset();
+  }
+
+  Particle.prototype.reset = function(){
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.size = Math.random() * 16 + 8;
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.6;
+    this.alpha = 0.3 + Math.random() * 0.7;
+    this.note = notes[Math.floor(Math.random() * notes.length)];
+    this.rotation = Math.random() * 2 * Math.PI; 
+    this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+  }
+
+  Particle.prototype.update = function(){
+    this.x += this.vx;
+    this.y += this.vy;
+    this.rotation += this.rotationSpeed;
+
+    if(this.x < -20) this.x = W + 20;
+    if(this.x > W + 20) this.x = -20;
+    if(this.y < -20) this.y = H + 20;
+    if(this.y > H + 20) this.y = -20;
+  }
+
+  Particle.prototype.draw = function(){
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.fillStyle = "#fff";
+    ctx.font = `${this.size}px Arial`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(this.note, 0, 0);
+    ctx.restore();
+  }
+
+  function connectParticles(){
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < CONNECT_DISTANCE){
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - dist/CONNECT_DISTANCE) * 0.25) + ')';
+          ctx.lineWidth = 1;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function initParticles(){
+    particles.length = 0;
+    for(let i=0;i<PARTICLE_COUNT;i++) particles.push(new Particle());
+  }
+
+  let rafId = null;
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    connectParticles();
+    for(let p of particles) p.update(), p.draw();
+    rafId = requestAnimationFrame(render);
+  }
+
+  function init(){
+    setSize();
+    initParticles();
+    if(rafId) cancelAnimationFrame(rafId);
+    render();
+  }
+
+  window.addEventListener('resize',function(){
+    clearTimeout(window._particles_resize_timeout);
+    window._particles_resize_timeout = setTimeout(init,120);
+  });
+
+  init();
+})();
+</script>
+</body>
+</html>

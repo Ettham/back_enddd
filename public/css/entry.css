@@ -1,0 +1,95 @@
+/* ===============================
+   public/css/entry.css
+   Estilo da Página de Entrada (entry.html)
+=============================== */
+
+/* Container principal */
+.form-center {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    flex-direction: column;
+    background: linear-gradient(145deg, #1d1d1d, #2a2a2a);
+    animation: fadeInPage 0.5s ease-in-out;
+}
+
+/* Caixa do formulário */
+.form-container {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: 0.3s ease;
+}
+
+/* Efeito ao pairar */
+.form-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* Título */
+.form-container h2 { 
+    margin-bottom: 15px; 
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+/* Descrição */
+.form-container p {
+    color: var(--color-text-dim);
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+/* Botões dentro do formulário */
+.form-container .btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: 0.25s ease;
+}
+
+/* Suavização de hover */
+.form-container .btn:hover {
+    transform: scale(1.03);
+}
+
+/* Link "Voltar para a Página Inicial" */
+.form-container .text-dim {
+    display: block;
+    margin-top: 30px;
+    font-size: 0.9em;
+    opacity: 0.8;
+    transition: 0.25s ease;
+}
+
+.form-container .text-dim:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+/* Animação sutil de entrada da página */
+@keyframes fadeInPage {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .form-container {
+        padding: 28px;
+        border-radius: 12px;
+    }
+}

@@ -1,0 +1,373 @@
+/* public/css/styles.css - Base Global, Variáveis, Estrutura Comum e Estilos de Autenticação */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* ===============================
+    VARIÁVEIS GLOBAIS
+================================== */
+:root {
+    --color-dark-bg: #222222;
+    --color-medium-bg: #333333;
+    --color-light-bg: #444444;
+    --color-text-light: #ffffff;
+    --color-text-dim: #cccccc;
+    --color-primary: #ff0033; /* Vermelho forte, usado para foco e botões */
+    --color-secondary: #007bff;
+    --font-family: 'Poppins', sans-serif;
+}
+
+/* ===============================
+    RESET BÁSICO
+================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-dark-bg);
+    color: var(--color-text-light);
+    line-height: 1.6;
+}
+
+/* ===============================
+    UTILITÁRIOS
+================================== */
+.text-primary { color: var(--color-primary) !important; }
+.text-dim { color: var(--color-text-dim) !important; }
+.mt-10 { margin-top: 10px !important; }
+.mt-20 { margin-top: 20px !important; }
+
+a {
+    color: var(--color-text-light);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover { color: var(--color-primary); }
+
+/* ===============================
+    HEADER PADRÃO
+================================== */
+.main-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    flex-wrap: wrap;
+    z-index: 100;
+}
+
+/* Logo */
+.logo a,
+.logo {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Menu */
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px; 
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.main-nav ul li a {
+    font-weight: 500;
+    font-size: 18px;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.main-nav ul li a:hover,
+.main-nav ul li a[aria-current="page"] {
+    color: #ffce3d;
+}
+
+.nav-item { /* Estilo do link direto no nav (fora do ul) */
+    color: #cfcfcf;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.nav-item:hover {
+    color: #00aaff;
+    font-weight: bold;
+}
+
+
+/* ===============================
+    HEADER TRANSPARENTE PREMIUM
+================================== */
+
+.transparent-header,
+.main-header.header-public.transparent {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,0,0,0);
+    backdrop-filter: blur(10px);
+    z-index: 999;   
+}
+
+/* Botão login / Botões de Ação no Header */
+.btn.btn-primary,
+.transparent-header .login-btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    font-weight: 600;
+    transition: 0.3s;
+    backdrop-filter: blur(6px);
+}
+
+.btn.btn-primary:hover,
+.transparent-header .login-btn:hover {
+    background: rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+}
+
+/* ===============================
+    BOTÕES GERAIS
+================================== */
+.btn {
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-small { padding: 8px 15px; font-size: 0.9em; }
+
+/* ===============================
+    FOOTER
+================================== */
+footer {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid var(--color-medium-bg);
+    color: var(--color-text-dim);
+    font-size: 0.8em;
+    width: 100%;
+}
+
+/* ===============================
+    ESTILOS DE AUTENTICAÇÃO (LOGIN/CADASTRO)
+================================== */
+
+.auth-page {
+    /* Estilos específicos para o body nas páginas de Auth */
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1920&q=90");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+}
+
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(2px);
+    z-index: -1;
+}
+
+.content {
+    width: 400px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 2px solid rgba(255,255,255,0.18);
+    border-radius: 14px;
+    padding: 30px 35px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+}
+
+.content h2 {
+    text-align: center;
+    font-size: 34px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.input-box {
+    width: 100%;
+    height: 55px;
+    position: relative;
+    margin: 18px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.25);
+    border-radius: 30px;
+    padding: 20px 45px 20px 20px;
+    font-size: 16px;
+    color: var(--color-text-light);
+}
+
+.input-box i {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--color-text-light);
+    cursor: pointer;
+}
+
+input::placeholder {
+    color: var(--color-text-dim);
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -5px 0 15px;
+    color: var(--color-text-dim);
+}
+
+.remember-forgot label input {
+    accent-color: var(--color-text-light);
+    margin-right: 5px;
+}
+
+.remember-forgot a {
+    color: var(--color-text-dim);
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+    color: var(--color-primary);
+}
+
+.btnn { /* Botão de Ação Principal no Formulário (Entrar/Cadastrar) */
+    width: 100%;
+    border-radius: 30px;
+    height: 45px;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+    background: var(--color-primary); 
+    color: var(--color-text-light);
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btnn:hover {
+    background: #a80022; /* Tonalidade mais escura do primary */
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14.5px;
+}
+
+.register-link a {
+    color: var(--color-text-light);
+    font-weight: 600;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+    color: var(--color-primary);
+}
+
+/* ESTILO PARA MENSAGENS DE FEEDBACK */
+.message {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: none; 
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+}
+.message.error {
+    color: #ffcccc; 
+    background-color: rgba(220, 20, 60, 0.2); 
+    border: 1px solid #e63946;
+}
+.message.success {
+    color: #ccffcc !important;
+    background-color: rgba(20, 220, 60, 0.2) !important;
+    border-color: #39d672 !important;
+}
+
+
+/* ===============================
+    RESPONSIVIDADE (Repetido e ajustado para Auth)
+================================== */
+@media (max-width: 600px) {
+    .main-header {
+        padding: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+    .logo { margin-bottom: 10px; }
+    .main-nav { width: 100%; margin-top: 10px; order: 3; }
+    .main-nav ul { flex-direction: column; align-items: center; }
+    .main-nav ul li { margin: 5px 0; }
+    .main-header .btn { width: 100%; text-align: center; margin-top: 15px; order: 2; }
+    
+    /* Responsividade específica do formulário */
+    .content {
+        width: 92%;
+        padding: 25px;
+    }
+    .content h2 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-header.header-public {
+        padding: 12px 25px;
+    }
+    .main-nav ul { gap: 18px; }
+    .main-nav a { font-size: 16px; }
+    .btn.btn-primary {
+        padding: 8px 18px;
+        font-size: 15px;
+    }
+}

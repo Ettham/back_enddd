@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sobre Nós | InstruMusic</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    
+    <style>
+        /* CSS Original (MANTIDO) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #eee;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+
+            background: 
+                linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)),
+                url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1920&q=90")
+                center/cover no-repeat fixed;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; 
+            pointer-events: none;
+        }
+
+        .main-header {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:15px 30px;
+        }
+
+        .main-header a {
+            color: #fff !important;
+        }
+
+        .logo a {
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .main-nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .main-nav ul li a:hover,
+        .main-nav ul li a[aria-current="page"] { /* Estilo para a página ativa */
+            background-color: #007bff;
+            color: #121212;
+        }
+
+        .btn-primary {
+            padding: 10px 18px;
+            font-weight: 700;
+            border-radius: 6px;
+            text-decoration: none;
+            background-color: #007bff; /* Cor mais coerente com o tema */
+            color: #fff !important;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .content-section {
+            flex-grow: 1;
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .about-content {
+             /* Corrigido: Estilo do cartão de conteúdo */
+            background: rgba(255, 255, 255, 0.1); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 30px 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.45);
+            font-size: 1.15em;
+            line-height: 1.8;
+            backdrop-filter: blur(4px);
+            transition: 0.3s;
+        }
+
+        .about-content:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.6);
+        }
+
+        .music-explore-section {
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .music-explore-container {
+            display: flex;
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap; /* Adicionado para responsividade */
+            justify-content: center; /* Centraliza cards */
+        }
+
+        .music-card {
+            flex: 1 1 300px; /* Flexbox melhorado */
+            min-width: 250px;
+            border-left: 5px solid #007bff;
+            padding: 25px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3); /* Fundo sutil */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.55);
+            transition: 0.3s;
+            backdrop-filter: blur(4px);
+        }
+
+        .music-card:hover {
+            transform: translateY(-5px);
+            border-left-color: #87cefa;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.8);
+        }
+
+        .music-card h3 {
+            color: #87cefa;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .music-card p {
+            color: #dcdcdc;
+            margin-bottom: 20px;
+        }
+
+        .music-card a {
+            background-color: #007bff;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .music-card a:hover {
+            background-color: #0056b3;
+        }
+
+        .main-footer {
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            padding: 40px 20px 20px;
+            color: #ccc;
+            margin-top: 50px;
+        }
+
+        .footer-container {
+            display: flex;
+            gap: 30px;
+            justify-content: space-between;
+            max-width: 1000px;
+            margin: auto;
+            flex-wrap: wrap;
+        }
+
+        .footer-section {
+             flex: 1 1 200px;
+        }
+
+        .footer-section h4 {
+            color: #87cefa;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+        }
+
+        .social-links a {
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: #fff;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: #007bff;
+        }
+
+        @media (max-width: 768px) {
+            .main-header { flex-direction: column; gap: 15px; }
+            .main-nav { order: 2; }
+            .btn-primary { order: 1; }
+            .main-nav ul { justify-content: center; }
+            .footer-container { justify-content: center; }
+            .footer-section { text-align: center; margin-bottom: 20px; }
+            .social-links { text-align: center; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="particles-js"></canvas>
+
+    <header class="main-header">
+        <div class="logo"><a href="/public/pages/index.html">InstruMusic</a></div>
+
+        <nav class="main-nav" id="mainNav">
+            <ul>
+                </ul>
+        </nav>
+
+        <a href="/public/pages/entry.html" id="actionBtn" class="btn btn-primary">Login / Cadastro</a>
+    </header>
+
+    <main class="content-section">
+        <h2 class="section-title">Nossa Missão</h2>
+
+        <div class="about-content">
+            <p>
+                A **InstruMusic** nasceu da paixão por tornar o aprendizado musical acessível, divertido e eficaz para todos, independentemente da idade ou do nível de experiência. Nossa missão é quebrar as barreiras tradicionais do ensino musical.
+            </p>
+            <p>
+                Oferecemos uma plataforma dinâmica, com aulas em vídeo de alta qualidade, material de apoio interativo, e um sistema de acompanhamento de progresso que motiva o aluno a evoluir no seu próprio ritmo. Acreditamos que a música é uma linguagem universal e que todos merecem a chance de se expressar através de um instrumento. Junte-se à nossa comunidade e comece a compor a sua história musical hoje.
+            </p>
+        </div>
+    </main>
+
+    <section class="music-explore-section">
+        <h2 class="section-title">Comece a Explorar!</h2>
+
+        <div class="music-explore-container">
+            
+            <div class="music-card">
+                <h3>Nossos Instrumentos</h3>
+                <p>Descubra a variedade de instrumentos disponíveis em nossos cursos.</p>
+                <a href="/public/pages/instrumentos.html">Ver Cursos</a>
+            </div>
+
+            <div class="music-card">
+                <h3>Histórias Que Inspiram</h3>
+                <p>Veja vídeos e depoimentos de outros alunos e músicos.</p>
+                <a href="/public/pages/depoimentos.html">Assista Agora</a>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+
+            <div class="footer-section">
+                <h4>InstruMusic</h4>
+                <p>A plataforma definitiva para sua jornada musical.</p>
+                <p>&copy; 2025</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Mapa do Site</h4>
+                <p><a href="/public/pages/sobre.html" style="color:#ccc;">Sobre Nós</a></p>
+                <p><a href="/public/pages/instrumentos.html" style="color:#ccc;">Instrumentos</a></p>
+                <p><a href="/public/pages/depoimentos.html" style="color:#ccc;">Depoimentos</a></p>
+            </div>
+
+
+            <div class="footer-section">
+                <h4>Contato</h4>
+                <p>Email: instrumusic@gmail.com</p>
+                <p>Telefone: (55) 48 98453-0987</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Siga-nos</h4>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram"><i class="ri-instagram-fill"></i></a>
+                    <a href="#" aria-label="GitHub"><i class="ri-github-fill"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="ri-youtube-fill"></i></a>
+                    <a href="#" aria-label="Twitter/X"><i class="ri-twitter-x-fill"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            Política de Privacidade | Termos de Serviço
+        </div>
+    </footer>
+
+    <script>
+    (function(){
+    const canvas = document.getElementById('particles-js');
+    const ctx = canvas.getContext('2d');
+    if(!ctx) return;
+
+    let DPR = window.devicePixelRatio || 1;
+    let W = 0, H = 0;
+    const particles = [];
+    const PARTICLE_COUNT = 80;
+    const CONNECT_DISTANCE = 120;
+    const notes = ["\u266A", "\u266B"];
+
+    function setSize(){
+        DPR = window.devicePixelRatio || 1;
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.style.width = W+'px';
+        canvas.style.height = H+'px';
+        canvas.width = Math.floor(W * DPR);
+        canvas.height = Math.floor(H * DPR);
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+
+    function Particle(){
+        this.reset();
+    }
+
+    Particle.prototype.reset = function(){
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.size = Math.random() * 16 + 8; 
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.alpha = 0.3 + Math.random() * 0.7;
+        this.note = notes[Math.floor(Math.random() * notes.length)];
+        this.rotation = Math.random() * 2 * Math.PI; 
+        this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+    }
+
+    Particle.prototype.update = function(){
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rotation += this.rotationSpeed;
+
+        if(this.x < -20) this.x = W + 20;
+        if(this.x > W + 20) this.x = -20;
+        if(this.y < -20) this.y = H + 20;
+        if(this.y > H + 20) this.y = -20;
+    }
+
+    Particle.prototype.draw = function(){
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.fillStyle = "#fff";
+        ctx.font = `${this.size}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(this.note, 0, 0);
+        ctx.restore();
+    }
+
+    function connectParticles(){
+        for(let i=0;i<particles.length;i++){
+            for(let j=i+1;j<particles.length;j++){
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < CONNECT_DISTANCE){
+                    ctx.beginPath();
+                    ctx.strokeStyle = 'rgba(255,255,255,' + ((1 - dist/CONNECT_DISTANCE) * 0.25) + ')';
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function initParticles(){
+        particles.length = 0;
+        for(let i=0;i<PARTICLE_COUNT;i++) particles.push(new Particle());
+    }
+
+    let rafId = null;
+    function render(){
+        ctx.clearRect(0,0,W,H);
+        connectParticles();
+        for(let p of particles) p.update(), p.draw();
+        rafId = requestAnimationFrame(render);
+    }
+
+    function init(){
+        setSize();
+        initParticles();
+        if(rafId) cancelAnimationFrame(rafId);
+        render();
+    }
+
+    window.addEventListener('resize',function(){
+        clearTimeout(window._particles_resize_timeout);
+        window._particles_resize_timeout = setTimeout(init,120);
+    });
+
+    init();
+    })();
+    </script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('userToken');
+        const mainNavUl = document.querySelector('#mainNav ul');
+        const actionBtn = document.getElementById('actionBtn');
+
+        // Função para construir links de navegação
+        const buildNav = (isLoggedIn) => {
+            mainNavUl.innerHTML = '';
+            const links = [
+                { href: "/public/pages/sobre.html", text: "Sobre" },
+                { href: "/public/pages/instrumentos.html", text: "Instrumentos" },
+                { href: "/public/pages/depoimentos.html", text: "Depoimentos" }
+            ];
+
+            if (isLoggedIn) {
+                // Adiciona links exclusivos para usuários logados
+                links.push({ href: "/public/pages/progresso.html", text: "Progresso" });
+                links.push({ href: "/public/pages/perfil.html", text: "Perfil" });
+            }
+
+            links.forEach(link => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = link.href;
+                a.textContent = link.text;
+                // Marca o link 'Sobre' como ativo (assumindo que este é o arquivo sobre.html)
+                if (link.href.includes('sobre.html')) {
+                    a.setAttribute('aria-current', 'page');
+                }
+                li.appendChild(a);
+                mainNavUl.appendChild(li);
+            });
+        };
+
+        if (token) {
+            // Usuário Logado: Altera o botão de ação para Dashboard
+            actionBtn.href = '/public/pages/progresso.html';
+            actionBtn.textContent = 'Dashboard';
+            buildNav(true);
+        } else {
+            // Usuário Não Logado: Mantém Login/Cadastro
+            buildNav(false);
+        }
+    });
+    </script>
+</body>
+</html>

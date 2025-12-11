@@ -1,0 +1,119 @@
+/* ===============================
+   TESTEMUNHOS – GLASSMORPHISM
+=============================== */
+
+.testimonials-glass {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #1f1f1f, #2b2b2b);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.testimonials-glass .container {
+  max-width: 1100px;
+  width: 100%;
+}
+
+.testimonials-glass .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.testimonials-glass .card {
+  padding: 25px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.testimonials-glass .card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.testimonials-glass .author {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+  color: #ff4d6d;
+  font-size: 1.05rem;
+  letter-spacing: 0.3px;
+}
+
+/* Pequena animação inicial */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+
+/* ===============================
+   BOTÃO — CRIAR DEPOIMENTO
+=============================== */
+
+.btn-criar-depoimento {
+  padding: 14px 34px;
+  font-size: 1.1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ff4d6d;
+  font-weight: bold;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-criar-depoimento:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.btn-criar-depoimento:active {
+  transform: scale(0.96);
+}
+
+
+
+/* ===============================
+   HEADER TRANSPARENTE GLOBAL
+=============================== */
+
+.main-header {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  backdrop-filter: none !important;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+/* Texto visível em qualquer fundo */
+.main-header .logo a,
+.main-header .main-nav a,
+.main-header .btn,
+.main-header .btn-primary,
+.main-header .btn-secondary {
+  color: #fff !important;
+}
+
+/* Hover refinado */
+.main-header .main-nav a:hover,
+.main-header .btn-primary:hover,
+.main-header .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-radius: 6px;
+  transition: 0.25s ease;
+}
